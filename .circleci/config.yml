@@ -9,19 +9,22 @@ defaults: &defaults
 
 jobs:
   build:
-    <<: *defaults
+    docker:
+      image: circleci/node:13.8.0
     steps:
       - checkout
       - run: npm i
       - run: npm lint
   test:
-    <<: *defaults
+    docker:
+      image: circleci/node:13.8.0
     steps:
       - checkout
       - run: npm i
       - run: npm test
   analyze:
-    <<: *defaults
+    docker:
+      image: circleci/node:13.8.0
     steps:
       - checkout
       - run: npm i
