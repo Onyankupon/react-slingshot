@@ -3,25 +3,25 @@
 version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#job
-defaults: $defaults
+defaults: &defaults
   docker:
     image: circleci/node:13.8.0
 
 jobs:
   build:
-    <<: defaults
+    <<: *defaults
     steps:
       - checkout
       - run: npm i
       - run: npm lint
   test:
-    <<: defaults
+    <<: *defaults
     steps:
       - checkout
       - run: npm i
       - run: npm test
   analyze:
-    <<: defaults
+    <<: *defaults
     steps:
       - checkout
       - run: npm i
