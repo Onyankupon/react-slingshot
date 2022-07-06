@@ -3,24 +3,37 @@
 version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#job
-commands:
-  print_pipeline_id:
-#     parameters:
-#       id:
-#         type: string
-    steps:
-      - run: echo "Hello World"
+defaults: $defaults
+  docker:
+    image: circleci/node:13.8.0
 
 jobs:
   build:
-    docker:
-      - image: circleci/node:13.8.0
+    <<: defaults
     steps:
-      - print_pipeline_id
-#           id: << pipeline.id >>
+      - checkout
+      - run: npm i
+      - run: npm lint
+  test:
+    <<: defaults
+    steps:
+      - checkout
+      - run: npm i
+      - run: npm test
+  analyze:
+    <<: defaults
+    steps:
+      - checkout
+      - run: npm i
+      - run: npm audit
+
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   my-workflow: 
     jobs:
-    - build
+      - build
+      - test:
+          requires: build
+      - analyze:
+          requires: test
